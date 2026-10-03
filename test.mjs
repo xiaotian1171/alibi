@@ -171,6 +171,7 @@ const screens = source.match(/const SCREENS = \[([\s\S]*?)\]/);
 ok("the screen list is where the tests expect it", Boolean(screens));
 const screenNames = [...screens[1].matchAll(/"([^"]+)"/g)].map((match) => match[1]);
 eq("every screen the renderer switches is in the page", screenNames.filter((name) => !htmlIds.includes(name)), []);
+eq("every screen the renderer switches is wired up", screenNames.filter((name) => !wired.has(name)), []);
 eq("every screen it switches is reachable", screenNames.filter((name) => !source.includes(`state.screen = "${name}"`)), []);
 eq("the app starts on a screen it can switch to", screenNames.includes(app.state.screen), true);
 eq("every screen in the page is switched by the renderer", ["setup", "briefing", "room", "notebook", "accuse", "reveal"].filter((name) => !screenNames.includes(name)), []);
