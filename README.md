@@ -6,6 +6,16 @@ killer — and a question list that never quite gets you the whole truth.
 **Play it:** https://xiaotian1171.github.io/alibi/
 **Built for:** [Pollinations Quest #15724](https://github.com/pollinations/pollinations/issues/15724) — a voice murder mystery where the suspects answer you.
 
+## Screens
+
+| The case | The room | A loose end |
+| --- | --- | --- |
+| ![The case](docs/the-case.png) | ![The room](docs/the-room.png) | ![A loose end](docs/a-loose-end.png) |
+
+| The notebook | The charge, answered |
+| --- | --- |
+| ![The notebook](docs/the-notebook.png) | ![The reveal](docs/the-reveal.png) |
+
 ## What it is
 
 You are the detective. One case, four suspects, and a house that nobody agrees
@@ -112,10 +122,21 @@ call. The starter case and the device voice cost nothing at all.
 
 ## Verified
 
-Walked through in a real browser on a cloud host, end to end: open the case, read
-the briefing, question a suspect through the list, press them until the loose end
-surfaces, check the notebook, name the killer, see the reveal, start again. No
-page errors, and every screen reachable.
+Walked end to end in a real browser (Chrome on a cloud desktop, 2026-10-03) against
+the deployed page: opened the case, read the briefing, questioned Nell Harrow three
+times and then asked what she had not told you — which is where her loose end
+surfaces — asked a question in plain words and watched it match the right item on
+the list, switched to a second suspect, opened the notebook (four suspects written
+up, one loose end), charged Aurel Vane and got the confession, the solution and
+every broken alibi, then started a second run with a clean notebook. Every screen
+was asserted visible when it should be, and the console was empty of errors. The
+screenshots above are from that run.
+
+Not covered by that run: the signed-in paths. Asking out loud, hearing the suspects
+in their own Pollinations voices, and writing a fresh case all need a signed-in key,
+because they are billed to the visitor's own Pollen — signed out, the app says so
+instead of failing. The offline starter case, the nine-question interview, the
+notebook, the charge and the reveal are all exercised above with no key at all.
 
 ## Licence
 
