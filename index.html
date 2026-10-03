@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Alibi — a voice murder mystery you question out loud</title>
+<meta name="description" content="Question four suspects in a murder, out loud or by typing, catch them contradicting each other and name the killer. Built on Pollinations." />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="bar">
+    <div class="brand"><span class="dot"></span> Alibi</div>
+    <div class="bar-right">
+        <span id="wallet" class="chip hidden"></span>
+        <span id="mode" class="chip">starter case</span>
+        <button id="signin" class="btn ghost small">Sign in</button>
+        <button id="signout" class="btn ghost small hidden">Sign out</button>
+    </div>
+</header>
+
+<main>
+
+    <!-- -------------------------------------------------------------- the desk -->
+    <section id="setup" class="panel">
+        <h1>A case, four suspects, one night</h1>
+        <p class="lede">
+            Ask them where they were. Ask what they were hiding. Write down what they say, because
+            one of them will say two things that cannot both be true — and one of them pushed a man
+            down a flight of stairs.
+        </p>
+
+        <div class="grid3">
+            <label class="field">
+                <span>Which case</span>
+                <select id="source">
+                    <option value="pack">The starter case — no sign-in</option>
+                    <option value="ai">A fresh case, written for you — sign in</option>
+                </select>
+            </label>
+            <label class="field">
+                <span>Their voices</span>
+                <select id="voice-mode">
+                    <option value="browser">This device's voice — free</option>
+                    <option value="pollinations">Pollinations voices — sign in</option>
+                    <option value="silent">Silent, read it yourself</option>
+                </select>
+            </label>
+            <label class="field"><span>Writing model</span><select id="text-model"></select></label>
+            <label class="field"><span>Voice model</span><select id="voice-model"></select></label>
+            <label class="field"><span>Default voice</span><select id="voice"></select></label>
+        </div>
+
+        <div class="row">
+            <button id="open" class="btn primary">Open the case</button>
+        </div>
+
+        <p id="setup-note" class="note">
+            Offline this is one complete case — four suspects, every question answered, the device's own
+            voice. Sign in and the host writes a new case each time, answers questions that are not on
+            the list, and speaks in four different voices — on your own Pollen.
+        </p>
+
+        <details id="signin-box" class="box">
+            <summary>Sign in with your own Pollen</summary>
+            <p class="fine">
+                Bring your own Pollen keeps this free to run: the suspects' answers, their voices and the
+                transcription of your spoken questions are billed to your own Pollinations balance, never
+                to mine. The key stays in this tab and is gone when you close it.
+            </p>
+            <div class="row tight">
+                <button id="oauth" class="btn small">Sign in with Pollinations</button>
+            </div>
+            <p class="fine">
+                No OAuth client registered for this page? Paste a key from <code>enter.pollinations.ai/keys</code>,
+                or put this page's hostname in as a client id below.
+            </p>
+            <div class="row tight">
+                <input id="pastekey" type="password" placeholder="sk_…" autocomplete="off" />
+                <button id="usekey" class="btn small">Use this key</button>
+            </div>
+            <label class="field">
+                <span>OAuth client id — optional</span>
+                <input id="appkey" type="text" placeholder="your registered client id" />
+            </label>
+            <p id="auth-note" class="fine">
+                Sign-in is the authorization-code flow with PKCE. Nothing is stored beyond this tab.
+            </p>
+        </details>
+    </section>
+
+    <!-- ------------------------------------------------------------ the briefing -->
+    <section id="briefing" class="panel hidden">
+        <p class="kicker">The case</p>
+        <h2 id="case-title"></h2>
+        <p id="case-when" class="fine"></p>
+        <p id="case-victim" class="premise"></p>
+        <p id="case-brief" class="lede"></p>
+        <div id="suspect-list" class="suspects"></div>
+        <div class="row">
+            <button id="read-case" class="btn ghost">Read the case aloud</button>
+            <button id="start" class="btn primary">Start the interviews</button>
+        </div>
+    </section>
+
+    <!-- --------------------------------------------------------------- the room -->
+    <section id="room" class="panel hidden">
+        <p class="kicker" id="room-kicker">Who are you questioning?</p>
+        <div id="suspect-chips" class="chips"></div>
+
+        <div class="suspect-head">
+            <h2 id="suspect-name"></h2>
+            <p id="suspect-role" class="fine"></p>
+            <p id="suspect-look" class="fine"></p>
+        </div>
+
+        <div id="transcript" class="transcript"></div>
+
+        <p class="kicker">Ask them</p>
+        <div id="question-menu" class="menu"></div>
+
+        <div class="row tight">
+            <input id="free-question" type="text" placeholder="Ask anything — sign in to use this" autocomplete="off" />
+            <button id="ask" class="btn small">Ask</button>
+            <button id="record" class="btn ghost small">Ask out loud</button>
+        </div>
+
+        <p id="pressed-note" class="fine"></p>
+
+        <div class="row">
+            <button id="to-notebook" class="btn ghost">Your notebook</button>
+            <button id="to-accuse" class="btn primary">Name the killer</button>
+        </div>
+    </section>
+
+    <!-- ----------------------------------------------------------- the notebook -->
+    <section id="notebook" class="panel hidden">
+        <p class="kicker">What they said</p>
+        <h2>Your notebook</h2>
+        <p class="fine">Everything anyone has told you, in the order they said it. Loose ends are the answers that cannot sit next to each other.</p>
+        <div id="notes" class="notes"></div>
+        <p class="kicker">Loose ends</p>
+        <div id="loose-ends" class="loose"></div>
+        <div class="row">
+            <button id="back-to-room" class="btn primary">Back to the room</button>
+        </div>
+    </section>
+
+    <!-- ------------------------------------------------------------- the charge -->
+    <section id="accuse" class="panel hidden">
+        <p class="kicker">One accusation</p>
+        <h2 id="accuse-name">Who pushed him down the stairs?</h2>
+        <p class="fine">You get one. The room goes quiet when you say it.</p>
+        <div id="accuse-list" class="menu"></div>
+        <div class="row">
+            <button id="back-from-accuse" class="btn ghost">Not yet — back to the room</button>
+        </div>
+    </section>
+
+    <!-- -------------------------------------------------------------- the reveal -->
+    <section id="reveal" class="panel hidden">
+        <p class="kicker">The room goes quiet</p>
+        <h2 id="verdict"></h2>
+        <p id="culprit" class="premise"></p>
+        <p id="solution" class="lede"></p>
+        <p class="kicker">How each alibi broke</p>
+        <div id="breaks" class="loose"></div>
+        <div class="row">
+            <button id="again" class="btn primary">Another case</button>
+            <button id="back" class="btn ghost">Back to the desk</button>
+        </div>
+    </section>
+
+</main>
+
+<footer class="fine">
+    Cases, suspect answers and voices come from
+    <a href="https://pollinations.ai" target="_blank" rel="noreferrer">Pollinations</a>.
+    Bring your own Pollen. MIT licensed.
+</footer>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="pack.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
