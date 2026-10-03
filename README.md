@@ -23,9 +23,11 @@ signed-in key because the transcription is billed to you.
    the suspects should sound, open the case.
 2. **The briefing** — where it happened, who died, and what each suspect says
    they were doing. Read it aloud if the room wants it.
-3. **The room** — one suspect at a time. Nine questions on the list; type your
-   own if you are signed in. Their answers stack up in the transcript, and the
-   moment one of them contradicts themselves it is marked as a loose end.
+3. **The room** — one suspect at a time. Nine questions on the list, and you can
+   ask in your own words: offline the question is matched against the nine,
+   signed in the suspect answers anything at all. Their answers stack up in the
+   transcript, and the moment one of them contradicts themselves it is marked as
+   a loose end.
 4. **The notebook** — everyone's answers in one place, plus every loose end you
    have caught so far.
 5. **The charge** — one accusation. You name the killer and the room goes quiet.

@@ -424,7 +424,7 @@ async function askFree(text) {
         });
         paintRoom();
         speak(suspect.deflect || "Ask me something I can answer.", suspectIndex(suspect.name));
-        toast("Offline the suspects only answer the nine questions on the list. Sign in to ask them anything.");
+        toast("Offline they only answer the nine questions on the list — that one did not match any of them. Sign in to ask them anything.");
         return;
     }
     if (state.busy) return;
@@ -595,9 +595,9 @@ function paintRoom() {
         : `Nothing asked yet.`;
 
     const free = state.mode === "key";
-    el.freeQuestion.disabled = !free;
-    el.ask.disabled = !free;
-    el.freeQuestion.placeholder = free ? "Ask anything at all" : "Sign in to ask your own questions";
+    el.freeQuestion.placeholder = free
+        ? "Ask anything at all"
+        : "Ask in your own words — offline they answer the nine questions above";
     el.record.title = free
         ? `Records, transcribes with ${state.transcribeModel || "the audio model"} and asks it — billed to your own Pollen`
         : "Sign in to ask out loud";
